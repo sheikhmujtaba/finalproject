@@ -12,22 +12,26 @@ var penguinPromise = d3.csv("Data.csv")
         var Arc = data.map(getArc)
         console.log(Arc)
         setup(data)
-d3.select("body")
+        setupbar(data)
+d3.select("#buttons")
 .append("button")
 .attr("class", "button")
 .attr("style", "vertical-align:middle")
 .append("span")
 .text("Back to home")
 .on("click", function(){
-    d3.select("svg *")
+    console.log("clicked")
+    d3.selectAll("svg *")
         .remove()
         d3.select("#xAxis")
         .remove()
          d3.select("#yAxis")
         .remove()
 setup(data)
-    
+setupbar(data)
+
 })
+           
 },
         
         function(err)
@@ -55,12 +59,12 @@ var margins = {top:30, bottom:50, left:30, right:50}
 
 var setup = function(myarray)
 {
-    var svg = d3.select("svg")
+    var svg = d3.select("#graph1")
     .attr("width", screen.width)
     .attr("height", screen.height);
     
     svg.append("g")
-    .attr("id", "graph")
+    .attr("class", "graph")
     .attr("transform", "translate("+margins.left+ "," +margins.top+")");
     
     var width = screen.width - margins.left - margins.right;
@@ -79,7 +83,7 @@ var setup = function(myarray)
     var xAxis = d3.axisBottom(xScale)
     var yAxis = d3.axisLeft(yScale)
     
-    d3.select("svg")
+    d3.select("#graph1")
         .append("g")
         .classed("axis", true);
     
@@ -95,6 +99,7 @@ var setup = function(myarray)
         .attr("transform","translate(30,"+margins.top+")")
         .call(yAxis);
     
+    
     drawarray(myarray, xScale, yScale, cScale)
     drawarray1(myarray, xScale, yScale, cScale)
     drawarray2(myarray, xScale, yScale, cScale)
@@ -104,12 +109,32 @@ var setup = function(myarray)
 
 
 var drawarray = function(myarray, xScale, yScale, cScale){
-    d3.select("#graph")
+    d3.select("g")
         .append("path")
         .datum(myarray)
+    .on("mouseover", function(d)
+        {
+        d3.select(this).attr("stroke-width", 6);
+        console.log(d)
+            var label = "Percentage Change in Global Mean Sea levels";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+        d3.select(this).attr("stroke-width", 3);
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
     .on("click", function(){
+        d3.select("#tooltip")
+                .classed("hidden", true)
         console.log("clicked")
-        d3.select("svg *")
+        d3.selectAll("svg *")
         .remove()
         d3.select("#xAxis")
         .remove()
@@ -131,12 +156,32 @@ var drawarray = function(myarray, xScale, yScale, cScale){
     }))
 }
 var drawarray1 = function(myarray, xScale, yScale, cScale){
-    d3.select("#graph")
+    d3.select("g")
         .append("path")
         .datum(myarray)
+    .on("mouseover", function(d)
+        {
+        d3.select(this).attr("stroke-width", 6);
+        console.log(d)
+            var label = "Percentage Change in Arctic Ice Sheets";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+        d3.select(this).attr("stroke-width", 3);
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
     .on("click", function(){
+        d3.select("#tooltip")
+                .classed("hidden", true)
         console.log("clicked")
-        d3.select("svg *")
+        d3.selectAll("svg *")
         .remove()
         d3.select("#xAxis")
         .remove()
@@ -159,13 +204,14 @@ var drawarray1 = function(myarray, xScale, yScale, cScale){
     }))
 }
 var drawarray2 = function(myarray, xScale, yScale, cScale){
-    d3.select("#graph")
+    d3.select("g")
         .append("path")
         .datum(myarray)
     .on("mouseover", function(d)
         {
+        d3.select(this).attr("stroke-width", 6);
         console.log(d)
-            var label = "(Year:" + d.Year + ", Percentage CO2 Emission" + d.PercentCO + ")";
+            var label = "Percentage Change in C02 emissions";
             d3.select("#tooltip")
                 .text(label)
                 .style("left", (d3.event.pageX + 10) + "px")
@@ -175,12 +221,13 @@ var drawarray2 = function(myarray, xScale, yScale, cScale){
         })
         .on("mouseout", function()
         {
+        d3.select(this).attr("stroke-width", 3);
             d3.select("#tooltip")
                 .classed("hidden", true);
         })
     .on("click", function(){
         console.log("clicked")
-        d3.select("svg *")
+        d3.selectAll("svg *")
         .remove()
         d3.select("#xAxis")
         .remove()
@@ -209,12 +256,12 @@ var drawarray2 = function(myarray, xScale, yScale, cScale){
 }
 var setup1 = function(myarray)
 {
-    var svg = d3.select("svg")
+    var svg = d3.select("#graph1")
     .attr("width", screen.width)
     .attr("height", screen.height);
     
     svg.append("g")
-    .attr("id", "graph")
+    .attr("class", "graph")
     .attr("transform", "translate("+margins.left+ "," +margins.top+")");
     
     var width = screen.width - margins.left - margins.right;
@@ -233,7 +280,7 @@ var setup1 = function(myarray)
     var xAxis = d3.axisBottom(xScale)
     var yAxis = d3.axisLeft(yScale)
     
-    d3.select("svg")
+    d3.select("#graph1")
         .append("g")
         .classed("axis", true);
     
@@ -252,9 +299,27 @@ var setup1 = function(myarray)
 }
 
 var drawCO = function(myarray, xScale, yScale, cScale){
-    d3.select("#graph")
+    d3.select("g")
         .append("path")
         .datum(myarray)
+     .on("mouseover", function(d)
+        {
+        d3.select(this).attr("stroke-width", 6);
+        console.log(d)
+            var label = "C02 emissions in metric tons per capita";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+        d3.select(this).attr("stroke-width", 3);
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
         .attr("fill", "none")
         .attr("stroke", "blue")
         .attr("stroke-width", 3)
@@ -271,12 +336,12 @@ var drawCO = function(myarray, xScale, yScale, cScale){
 }
 var setup2 = function(myarray)
 {
-    var svg = d3.select("svg")
+    var svg = d3.select("#graph1")
     .attr("width", screen.width)
     .attr("height", screen.height);
     
     svg.append("g")
-    .attr("id", "graph")
+    .attr("class", "graph")
     .attr("transform", "translate("+margins.left+ "," +margins.top+")");
     
     var width = screen.width - margins.left - margins.right;
@@ -295,7 +360,7 @@ var setup2 = function(myarray)
     var xAxis = d3.axisBottom(xScale)
     var yAxis = d3.axisLeft(yScale)
     
-    d3.select("svg")
+    d3.select("#graph1")
         .append("g")
         .classed("axis", true);
     
@@ -315,14 +380,30 @@ var setup2 = function(myarray)
 
 
 var drawGMSL = function(myarray, xScale, yScale, cScale){
-   d3.select('svg')
+   d3.select('#grah1')
     .attr("height",screen.height)
     .attr("width",screen.width)
-    d3.select('#graph')
+    d3.select('g')
     .selectAll("circle")
     .data(myarray)
     .enter()
     .append("circle")
+    .on("mouseover", function(d)
+        {
+        console.log(d)
+            var label = "(Year:" + d.Year + ", GMSL in mm:" + d.GlobalMeanSeaLevel + ")";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX - 100) + "px")
+                .style("top", (d3.event.pageY - 50) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
     .attr("cx",function(d)
     {
         var years = parseFloat(d.Year)
@@ -341,12 +422,12 @@ var drawGMSL = function(myarray, xScale, yScale, cScale){
 
 var setup3 = function(myarray)
 {
-    var svg = d3.select("svg")
+    var svg = d3.select("#graph1")
     .attr("width", screen.width)
     .attr("height", screen.height);
     
     svg.append("g")
-    .attr("id", "graph")
+    .attr("class", "graph")
     .attr("transform", "translate("+margins.left+ "," +margins.top+")");
     
     var width = screen.width - margins.left - margins.right;
@@ -365,7 +446,7 @@ var setup3 = function(myarray)
     var xAxis = d3.axisBottom(xScale)
     var yAxis = d3.axisLeft(yScale)
     
-    d3.select("svg")
+    d3.select("#graph1")
         .append("g")
         .classed("axis", true);
     
@@ -383,9 +464,27 @@ var setup3 = function(myarray)
     drawArctic(myarray, xScale, yScale, cScale)
 }
 var drawArctic = function(myarray, xScale, yScale, cScale){
-    d3.select("#graph")
+    d3.select("g")
         .append("path")
         .datum(myarray)
+     .on("mouseover", function(d)
+        {
+        d3.select(this).attr("stroke-width", 6);
+        console.log(d)
+            var label = "Change in Arctic Ice Sheets in million square Kilometers";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+        d3.select(this).attr("stroke-width", 3);
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
         .attr("fill", "none")
         .attr("stroke", "red")
         .attr("stroke-width", 3)
@@ -403,28 +502,28 @@ var drawArctic = function(myarray, xScale, yScale, cScale){
 
 var drawlegend = function(myarray)
 {
-    d3.select("svg")
+    d3.select("#graph1")
         .append("g")
         .append("circle")
         .attr("cx",150)
         .attr("cy",20)
         .attr("r", 7)
         .style("fill", "red")
-     d3.select("svg")
+     d3.select("#graph1")
         .append("text")
         .attr("x", 160)
         .attr("y", 20)
         .text("Change in Arctic Ice Sheets")
         .style("font-size", "13px")
         .attr("alignment-baseline","middle")
-    d3.select("svg")
+    d3.select("#graph1")
         .append("g")
         .append("circle")
         .attr("cx",340)
         .attr("cy",20)
         .attr("r", 7)
         .style("fill", "blue")
-    d3.select("svg")
+    d3.select("#graph1")
         .append("text")
         .attr("x", 350)
         .attr("y", 20)
@@ -438,11 +537,75 @@ var drawlegend = function(myarray)
         .attr("cy",20)
         .attr("r", 7)
         .style("fill", "black")
-    d3.select("svg")
+    d3.select("#graph1")
         .append("text")
         .attr("x", 510)
         .attr("y", 20)
         .text("Change in Global Mean Sea Level")
         .style("font-size", "13px")
         .attr("alignment-baseline","middle")
+}
+var setupbar = function(myarray)
+{
+    var svgbro = d3.select("#graph2")
+    .attr("width", screen.width)
+    .attr("height", screen.height);
+    
+    svgbro.append("g")
+    .attr("class", "graphbro")
+    .attr("transform", "translate("+margins.left+ "," +margins.top+")");
+    
+    var width = screen.width - margins.left - margins.right;
+    var height = screen.height - margins.top - margins.bottom;
+    
+    var xScale = d3.scaleLinear()
+        .domain([1880, 2011])
+        .range([0, width]);
+    
+    var yScale = d3.scaleLinear()
+        .domain([56, 60])
+        .range([height, 0]);
+
+    var cScale = d3.scaleOrdinal(d3.schemeTableau10)
+    
+    var xAxis = d3.axisBottom(xScale)
+    var yAxis = d3.axisLeft(yScale)
+    
+    d3.select("#graph2")
+        .append("g")
+        .classed("axis", true);
+    d3.select("#graph2")
+        .select(".axis")
+        .append("g")
+        .attr("id", "xAxis")
+        .attr("transform", "translate("+margins.left+","+(margins.top+height)+")")
+        .call(xAxis);
+    d3.select("#graph2")
+    .select(".axis")
+        .append("g")
+        .attr("id", "yAxis")
+        .attr("transform","translate(30,"+margins.top+")")
+        .call(yAxis);
+    drawbars(myarray, xScale, yScale, cScale)
+}
+
+drawbars = function(myarray, xScale, yScale, cScale)
+{
+d3.select("#graph2")
+    .selectAll("rect")
+    .data(myarray)
+    .enter()
+    .append("g")
+    .append("rect")
+    .attr("fill", "red")
+    .attr("width", "20px" )
+    .attr("x", function(d){
+     var years = parseFloat(d.Year)
+     return xScale(years)
+})
+    .attr("height", function(d){
+    var num = parseFloat(d.InFahrenheit)
+    return yScale(num)
+    
+})
 }
