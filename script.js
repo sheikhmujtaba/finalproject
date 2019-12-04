@@ -102,14 +102,14 @@ var drawarray = function(myarray, xScale, yScale, cScale){
          })
         .attr("fill", "none")
         .attr("stroke", "black")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 3)
     .attr("d", d3.line()
           .x(function(d){
-        var years = parseInt(d.Year)
+        var years = parseFloat(d.Year)
           return xScale(years)
     })
         .y(function(d) {
-        var num = parseInt(d.PercentGMSL)
+        var num = parseFloat(d.PercentGMSL)
         return yScale(num);
     }))
 }
@@ -122,7 +122,7 @@ var drawarray1 = function(myarray, xScale, yScale, cScale){
     })
         .attr("fill", "none")
         .attr("stroke", "red")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 3)
     .attr("d", d3.line()
           .defined(function(d){return parseFloat(d.PercentArc)})
           .x(function(d){
@@ -138,13 +138,28 @@ var drawarray2 = function(myarray, xScale, yScale, cScale){
     d3.select("#graph")
         .append("path")
         .datum(myarray)
+    .on("mouseover", function(d)
+        {
+        console.log(d)
+            var label = "(Year:" + d.Year + ", Percentage CO2 Emission" + d.PercentCO + ")";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+        })
+        .on("mouseout", function()
+        {
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
     .on("click", function(){
         console.log("clicked")
         d3.select("svg *")
         .remove()
         d3.select("#xAxis")
         .remove()
-         d3.select("#yAxisfg")
+         d3.select("#yAxis")
         .remove()
         
         
@@ -154,7 +169,7 @@ var drawarray2 = function(myarray, xScale, yScale, cScale){
     })
         .attr("fill", "none")
         .attr("stroke", "blue")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 3)
     .attr("d", d3.line()
           .defined(function(d){return parseFloat(d.PercentCO)})
           .x(function(d){
@@ -216,7 +231,7 @@ var drawCO = function(myarray, xScale, yScale, cScale){
         .datum(myarray)
         .attr("fill", "none")
         .attr("stroke", "black")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 3)
     .attr("d", d3.line()
           .defined(function(d){return parseFloat(d.CO2Emissions)})
           .x(function(d){
@@ -274,20 +289,26 @@ var setup2 = function(myarray)
 
 
 var drawGMSL = function(myarray, xScale, yScale, cScale){
-    d3.select("#graph")
-        .append("path")
-        .datum(myarray)
-        .attr("fill", "none")
-        .attr("stroke", "red")
-        .attr("stroke-width", 1.5)
-    .attr("d", d3.line()
-          .defined(function(d){return parseFloat(d.GlobalMeanSeaLevel)})
-          .x(function(d){
+   d3.select('svg')
+    .attr("height",screen.height)
+    .attr("width",screen.width)
+    d3.select('#graph')
+    .selectAll("circle")
+    .data(myarray)
+    .enter()
+    .append("circle")
+    .attr("cx",function(d)
+    {
         var years = parseFloat(d.Year)
-          return xScale(years)
+        {return xScale(years)}
     })
-        .y(function(d) {
+    .attr("cy",function(d)
+    {
+
         var num = parseFloat(d.GlobalMeanSeaLevel)
-        return yScale(num);
-    }))
+        {return yScale(num)}
+    })
+    .attr("r",5)
+
+
 }
