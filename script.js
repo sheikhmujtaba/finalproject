@@ -559,11 +559,11 @@ var setupbar = function(myarray)
     var height = screen.height - margins.top - margins.bottom;
     
     var xScale = d3.scaleLinear()
-        .domain([1880, 2011])
+        .domain([1880, 2010])
         .range([0, width]);
     
     var yScale = d3.scaleLinear()
-        .domain([56, 60])
+        .domain([56, 59])
         .range([height, 0]);
 
     var cScale = d3.scaleOrdinal(d3.schemeTableau10)
@@ -586,12 +586,12 @@ var setupbar = function(myarray)
         .attr("id", "yAxis")
         .attr("transform","translate(30,"+margins.top+")")
         .call(yAxis);
-    drawbars(myarray, xScale, yScale, cScale)
+    drawtemprature(myarray, xScale, yScale, cScale)
 }
 
 drawbars = function(myarray, xScale, yScale, cScale)
 {
-d3.select("#graph2")
+d3.select(".graphbro")
     .selectAll("rect")
     .data(myarray)
     .enter()
@@ -615,11 +615,10 @@ d3.select("#graph2")
                 .classed("hidden", true);
         })
     .attr("fill", "aqua")
-    .attr("transform", "translate(32)")
     .attr("width", "20px" )
     .attr("height", function(d)
          {
-return yScale(6-d.InFahrenheit )
+return yScale(d.InFahrenheit )
 })
     
     .attr("x", function(d){
@@ -627,8 +626,47 @@ return yScale(6-d.InFahrenheit )
      return xScale(years)
 })
     .attr("y", function(d){
+     console.log(d.InFahrenheit)
     var num = parseFloat(d.InFahrenheit)
     return yScale(num)
+   
     
 })
 }
+var drawtemprature = function(myarray, xScale, yScale, cScale){
+    d3.select(".graphbro")
+        .append("path")
+        .datum(myarray)
+     .on("mouseover", function(d)
+        {
+        d3.select(this).attr("stroke-width", 6);
+        console.log(d)
+            var label = "Change in Global Average Temperature in Fahrenheit ";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+        d3.select(this).attr("stroke-width", 3);
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
+        .attr("fill", "none")
+        .attr("stroke", "orange")
+        .attr("stroke-width", 3)
+    .attr("d", d3.line()
+          .defined(function(d){return parseFloat(d.InFahrenheit)})
+          .x(function(d){
+        var years = parseFloat(d.Year)
+          return xScale(years)
+    })
+        .y(function(d) {
+        var num = parseFloat(d.InFahrenheit)
+        return yScale(num);
+    }))
+}
+
