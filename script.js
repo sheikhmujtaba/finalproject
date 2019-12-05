@@ -597,6 +597,23 @@ d3.select("#graph2")
     .enter()
     .append("g")
     .append("rect")
+    .on("mouseover", function(d)
+        {
+        d3.select(this).attr("stroke-width", 6);
+            var label = "Change in Global Average Temperature in Fahrenheit";
+            d3.select("#tooltip")
+                .text(label)
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 30) + "px")
+                .classed("hidden", false);
+            
+        })
+        .on("mouseout", function()
+        {
+        d3.select(this).attr("stroke-width", 3);
+            d3.select("#tooltip")
+                .classed("hidden", true);
+        })
     .attr("fill", "aqua")
     .attr("transform", "translate(32)")
     .attr("width", "20px" )
