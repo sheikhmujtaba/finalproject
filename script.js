@@ -597,13 +597,19 @@ d3.select("#graph2")
     .enter()
     .append("g")
     .append("rect")
-    .attr("fill", "red")
+    .attr("fill", "aqua")
+    .attr("transform", "translate(32)")
     .attr("width", "20px" )
+    .attr("height", function(d)
+         {
+return yScale(6-d.InFahrenheit )
+})
+    
     .attr("x", function(d){
      var years = parseFloat(d.Year)
      return xScale(years)
 })
-    .attr("height", function(d){
+    .attr("y", function(d){
     var num = parseFloat(d.InFahrenheit)
     return yScale(num)
     
